@@ -1,17 +1,17 @@
 import { LightningElement, wire, track } from 'lwc';
 import getAccounts from '@salesforce/apex/AccountController.getAccounts';
-
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import createAccount from '@salesforce/apex/AccountController.createAccount'
 
 
 export default class AccountList extends LightningElement {
-    
     @track data;
     @track sortBy;
     @track sortDirection;
     @track columns;
      key;
 
-       // JS Properties 
+       // Page Properties 
     pageSizeOptions = [3, 5, 7]; //Page size options
     records = []; //All records available in the data table
     columns = []; //columns information available in the data table
@@ -19,17 +19,26 @@ export default class AccountList extends LightningElement {
     pageSize; //No.of records to be displayed per page
     totalPages; //Total no.of pages
     pageNumber = 1; //Page number    
-    //recordsToDisplay = []; //Records to be displayed on the page = data
-    
 
 
-    // @track accounts;
-       //function that handle the search keywords
+      // to display all accccounts and search base on single keys
+    @wire(getAccounts, {searchkey: '$key'})
+    accouns(result) {
+        if (result.data) {
+            this.data = result.data;
+            this.error = undefined;
+        } else if (result.error) {
+            this.error = result.error;
+            this.data = undefined;
+        }
+    }
+   
+       //function that handle the search keywords to @track accounts;
        updateKey(event){
         this.key = event.target.value;
      }
 
-
+     //to handle pagination
      get bDisableFirst() {
         return this.pageNumber == 1;
     }
@@ -49,9 +58,6 @@ export default class AccountList extends LightningElement {
             { label: 'Phone', fieldName: 'Phone', type: 'phone' , editable: true, sortable: 'true' },
             { label: 'Website', fieldName: 'Website', type: 'url' , editable: true, sortable: 'true' }
         ];
-
-    
-     
     }
 
 
@@ -72,49 +78,6 @@ export default class AccountList extends LightningElement {
         });
     }
 
-
-    @wire(getAccounts)
-    accouns(result) {
-        if (result.data) {
-            this.data = result.data;
-            this.error = undefined;
-        } else if (result.error) {
-            this.error = result.error;
-            this.data = undefined;
-        }
-    }
-
-
-  
-    doSorting(event) {
-        this.sortBy = event.detail.fieldName;
-        this.sortDirection = event.detail.sortDirection;
-        this.sortData(this.sortBy, this.sortDirection);
-    }
-
-    sortData(fieldname, direction) {
-        let parseData = JSON.parse(JSON.stringify(this.data));
-        // Return the value stored in the field
-        let keyValue = (a) => {
-            return a[fieldname];
-        };
-        // cheking reverse direction
-        let isReverse = direction === 'asc' ? 1: -1;
-        // sorting data
-        parseData.sort((x, y) => {
-            x = keyValue(x) ? keyValue(x) : ''; // handling null values
-            y = keyValue(y) ? keyValue(y) : '';
-            // sorting values based on direction
-            return isReverse * ((x > y) - (y > x));
-        });
-        this.data = parseData;
-    }
-
-
-
-
-
-    
     handleRecordsPerPage(event) {
         this.pageSize = event.target.value;
         this.paginationHelper();
@@ -141,7 +104,7 @@ export default class AccountList extends LightningElement {
     }
 
 
-    // JS function to handel pagination logic 
+    // function to handel pagination logic 
     paginationHelper() {
         this.data = [];
         // calculate total pages
@@ -163,12 +126,37 @@ export default class AccountList extends LightningElement {
     }
 
 
-
-// create an account
-
-    ///modal to create account
-    @track showModal = false;
   
+
+
+    ///sorting table
+    doSorting(event) {
+        this.sortBy = event.detail.fieldName;
+        this.sortDirection = event.detail.sortDirection;
+        this.sortData(this.sortBy, this.sortDirection);
+    }
+
+    sortData(fieldname, direction) {
+        let parseData = JSON.parse(JSON.stringify(this.data));
+        // Return the value stored in the field
+        let keyValue = (a) => {
+            return a[fieldname];
+        };
+        // cheking reverse direction
+        let isReverse = direction === 'asc' ? 1: -1;
+        // sorting data
+        parseData.sort((x, y) => {
+            x = keyValue(x) ? keyValue(x) : ''; // handling null values
+            y = keyValue(y) ? keyValue(y) : '';
+            // sorting values based on direction
+            return isReverse * ((x > y) - (y > x));
+        });
+        this.data = parseData;
+    }
+
+
+    ///Account creation with modal 
+    @track showModal = false;
 
     openModal() {
         this.showModal = true;
@@ -180,44 +168,32 @@ export default class AccountList extends LightningElement {
 
     handleSuccess() {
         this.closeModal();
-        // Perform any necessary actions after successful account creation
-        // const accountId = event.detail.id;
-        // this.refreshTable(accountId); // Call the parent component's method to refresh the datatable
-        // this.showToast('Success', 'Account Created', 'success');
+        this.showToast('Success', 'Account created successfully.', 'success');
     }
-    
-    // //handle error
-    // handleError(error) {
-    //     this.closeModal();
 
-    //     let errorMessage = 'Unknown error';
-    //     if (error && error.body && error.body.message) {
-    //         errorMessage = error.body.message;
-    //     }
+    handleError(error) {
+       this.showToast('Error', error.body.message, 'error');
+    }
 
-    //     this.showToast('Error', errorMessage, 'error');
-    // }
+    handleSave(event) {
+        const fields = event.detail.fields;
+        createAccount({ account: fields })
+            .then(() => {
+                this.handleSuccess();
+            })
+            .catch((error) => {
+                this.handleError(error);
+            });
+    }
 
-    // showToast(title, message, variant) {
-    //     const event = new ShowToastEvent({
-    //         title: title,
-    //         message: message,
-    //         variant: variant
-    //     });
-    //     this.dispatchEvent(event);
-    // }
-
-    // createAccount(recordInput) {
-    //     return createAccount({ account: recordInput })
-    //         .then(result => {
-    //             this.handleSuccess(result);
-    //         })
-    //         .catch(error => {
-    //             this.handleError(error);
-    //         });
-    // }
-   
+    showToast(title, message, variant) {
+        const toastEvent = new ShowToastEvent({
+            title: title,
+            message: message,
+            variant: variant,
+        });
+        this.dispatchEvent(toastEvent);
+    }
 }
-
 
 

@@ -2,12 +2,6 @@ import { LightningElement, api, wire, track } from 'lwc';
 import getAccounts from '@salesforce/apex/ListControllerLwc.getAccounts';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
-// import ACCOUNT_NAME_FIELD from '@salesforce/schema/Account.Name';
-// //import ACCOUNT_TYPE_FIELD from '@salesforce/schema/Account.Type';
-// import ACCOUNT_PHONE_FIELD from '@salesforce/schema/Account.Phone';
-// import ACCOUNT_INDUSTRY from '@salesforce/schema/Account.Industry';
-// import ACCOUNT_REVENUE from '@salesforce/schema/Account.AnnualRevenue';
-// import ACCOUNT_WEBSITE from '@salesforce/schema/Account.Website';
 
 const COLUMNS = [
     { label: 'Account Name', fieldName: 'Name', type: 'text', editable: true, sortable: 'true' },
@@ -52,16 +46,16 @@ export default class CustomSearch extends LightningElement {
 
 
 
-    @wire(getAccounts)
-    accouns(result) {
-        if (result.data) {
-            this.data = result.data;
-            this.error = undefined;
-        } else if (result.error) {
-            this.error = result.error;
-            this.data = undefined;
-        }
-    }
+   @wire(getAccounts, {searchkey: '$key'})
+   accouns(result) {
+       if (result.data) {
+           this.data = result.data;
+           this.error = undefined;
+       } else if (result.error) {
+           this.error = result.error;
+           this.data = undefined;
+       }
+   }
 
     @track data;
     @track sortBy;
@@ -99,7 +93,6 @@ export default class CustomSearch extends LightningElement {
 
     ///modal to create account
     @track showModal = false;
-    @api refreshTable;
 
     openModal() {
         this.showModal = true;
@@ -111,41 +104,35 @@ export default class CustomSearch extends LightningElement {
 
     handleSuccess() {
         this.closeModal();
-        // Perform any necessary actions after successful account creation
-        // const accountId = event.detail.id;
-        // this.refreshTable(accountId); // Call the parent component's method to refresh the datatable
-        // this.showToast('Success', 'Account Created', 'success');
+        this.showToast('Success', 'Account created successfully.', 'success');
     }
-    
-    // //handle error
-    // handleError(error) {
-    //     this.closeModal();
 
-    //     let errorMessage = 'Unknown error';
-    //     if (error && error.body && error.body.message) {
-    //         errorMessage = error.body.message;
-    //     }
+    handleError(error) {
+        this.showToast('Error', error.body.message, 'error');
+    }
 
-    //     this.showToast('Error', errorMessage, 'error');
-    // }
+    handleSave(event) {
+        const fields = event.detail.fields;
+        createAccount({ account: fields })
+            .then(() => {
+                this.handleSuccess();
+            })
+            .catch((error) => {
+                this.handleError(error);
+            });
+    }
 
-    // showToast(title, message, variant) {
-    //     const event = new ShowToastEvent({
-    //         title: title,
-    //         message: message,
-    //         variant: variant
-    //     });
-    //     this.dispatchEvent(event);
-    // }
-
-    // createAccount(recordInput) {
-    //     return createAccount({ account: recordInput })
-    //         .then(result => {
-    //             this.handleSuccess(result);
-    //         })
-    //         .catch(error => {
-    //             this.handleError(error);
-    //         });
-    // }
-   
+    showToast(title, message, variant) {
+        const toastEvent = new ShowToastEvent({
+            title: title,
+            message: message,
+            variant: variant,
+        });
+        this.dispatchEvent(toastEvent);
+    }
 }
+
+
+
+
+

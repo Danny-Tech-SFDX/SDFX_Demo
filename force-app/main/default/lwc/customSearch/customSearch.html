@@ -25,8 +25,6 @@
 
 
 
-
-
    
         <div class="slds-grid slds-grid_vertical-align-center slds-p-around_medium">
             <lightning-button label="Create New Account" variant="brand" onclick={openModal}></lightning-button>
@@ -40,7 +38,14 @@
                         <h2 class="slds-text-heading_medium">New Account</h2>
                     </div>
                     <div class="slds-modal__content">
-                        <lightning-record-edit-form object-api-name="Account" onsuccess={handleSuccess}>
+
+                        <lightning-messages></lightning-messages>
+                <!-- Display error message -->
+                <template if:true={errorMessage}>
+                    <div class="slds-text-color_error">{errorMessage}</div>
+                </template>
+
+                        <lightning-record-edit-form object-api-name="Account" onsuccess={handleSuccess} onerror={handleError}>
                             <lightning-messages></lightning-messages>
                             <div class="slds-grid slds-wrap">
                                 <div class="slds-col slds-size_1-of-2">

@@ -1,7 +1,5 @@
 
      <template>
-  
-
 <lightning-card title="New Final Account List">
     <lightning-layout multiple-rows="true" vertical-align="end">
         <lightning-layout-item size="4" padding="around-small">
@@ -12,7 +10,6 @@
         <lightning-button label="Search Account" onclick={handleSearch} variant="brand"></lightning-button>
         </lightning-layout-item>
     
- 
             <lightning-layout-item  size="12" padding="around-small">
                 <lightning-datatable 
                 key-field="id" 
@@ -27,7 +24,7 @@
     </lightning-layout>
 
 
-    
+           <!-- PAGINATION STRUCTURE -->
             <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread" style="padding-top: 0.5em;">
                 <!--RECORDS PER PAGE-->
                 <div class="slds-col">
@@ -42,7 +39,6 @@
                         </div>
                     </div>
                 </div>
-    
                 <!--PAGE NAVIGATION-->
                 <div class="slds-align_absolute-center" style="height:5rem">
                     <lightning-button disabled={bDisableFirst} icon-name="utility:jump_to_left" label="First" class="slds-p-horizontal_x-small" alternative-text="first page" onclick={firstPage}></lightning-button>
@@ -55,7 +51,6 @@
     
                     <lightning-button disabled={bDisableLast} icon-name="utility:jump_to_right" label="Last" alternative-text="last page" onclick={lastPage} icon-position="right"></lightning-button>
                 </div>
-    
                 <!--TOTAL RECORDS-->
                 <div class="slds-clearfix">
                     <div class="slds-float_right">
@@ -63,16 +58,13 @@
                     </div>
                 </div>
             </div>
-        <!-- </template> -->
+      
 
 
         <!-- create an account with modal -->
-        
-   
         <div class="slds-grid slds-grid_vertical-align-center slds-p-around_medium">
             <lightning-button label="Create New Account" variant="brand" onclick={openModal}></lightning-button>
         </div>
-    
         <template if:true={showModal}>
             <div class="slds-backdrop slds-backdrop_open"></div>
             <div class="slds-modal slds-fade-in-open">
@@ -81,7 +73,14 @@
                         <h2 class="slds-text-heading_medium">New Account</h2>
                     </div>
                     <div class="slds-modal__content">
-                        <lightning-record-edit-form object-api-name="Account" onsuccess={handleSuccess}>
+
+                        <lightning-messages></lightning-messages>
+                <!-- Display error message -->
+                <template if:true={errorMessage}>
+                    <div class="slds-text-color_error">{errorMessage}</div>
+                </template>
+
+                        <lightning-record-edit-form object-api-name="Account" onsuccess={handleSuccess} onerror={handleError}>
                             <lightning-messages></lightning-messages>
                             <div class="slds-grid slds-wrap">
                                 <div class="slds-col slds-size_1-of-2">
@@ -95,8 +94,12 @@
                                 </div>
                             </div>
                             <div class="slds-m-top_medium">
-                                <lightning-button type="submit" label="Save" variant="brand"></lightning-button>
-                                <lightning-button label="Cancel" variant="neutral" onclick={closeModal}></lightning-button>
+                                <lightning-button type="submit" label="Save" variant="brand" ></lightning-button>
+                              
+                            </div>
+                            <div class="slds-m-top_medium">
+                                
+                                <lightning-button label="Cancel" variant="brand" onclick={closeModal}></lightning-button>
                             </div>
                         </lightning-record-edit-form>
                     </div>
@@ -104,10 +107,7 @@
             </div>
         </template>
  
-   
-
 </lightning-card>
-
   </template>
 
  
