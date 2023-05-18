@@ -1,0 +1,55 @@
+<template>
+    <div class="slds-grid slds-grid_vertical-align-center slds-p-around_medium">
+        <lightning-input type="text" label="Search Account" value={searchKey} onchange={handleSearch}></lightning-input>
+    </div>
+
+    <div class="slds-grid slds-grid_align-center slds-p-around_medium">
+        <lightning-button-group>
+            <lightning-button label="First" onclick={goToFirstPage} disabled={currentPage = 1}></lightning-button>
+            <lightning-button label="Prev" onclick={goToPreviousPage} disabled={currentPage = 1}></lightning-button>
+            <lightning-button label={currentPage} disabled></lightning-button>
+            <lightning-button label="Next" onclick={goToNextPage} disabled={currentPage == totalPages}></lightning-button>
+            <lightning-button label="Last" onclick={goToLastPage} disabled={currentPage == totalPages}></lightning-button>
+        </lightning-button-group>
+    </div>
+
+    <lightning-datatable
+        key-field="Id"
+        data={displayedAccounts}
+        columns={columns}
+        sorted-by={sortedBy}
+        sorted-direction={sortedDirection}
+        onsort={handleSort}
+    ></lightning-datatable>
+
+    <template if:true={showModal}>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        <div class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">New Account</h2>
+                </div>
+                <div class="slds-modal__content">
+                    <lightning-record-edit-form object-api-name="Account" onsuccess={handleSuccess}>
+                        <lightning-messages></lightning-messages>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Name" required></lightning-input-field>
+                                <lightning-input-field field-name="Industry"></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="AnnualRevenue" type="currency"></lightning-input-field>
+                                <lightning-input-field field-name="Phone" type="phone"></lightning-input-field>
+                                <lightning-input-field field-name="Website" type="url"></lightning-input-field>
+                            </div>
+                        </div>
+                        <div class="slds-m-top_medium">
+                            <lightning-button type="submit" label="Save" variant="brand"></lightning-button>
+                            <lightning-button label="Cancel" variant="neutral" onclick={closeModal}></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

@@ -162,6 +162,62 @@ export default class AccountList extends LightningElement {
         }
     }
 
+
+
+// create an account
+
+    ///modal to create account
+    @track showModal = false;
+  
+
+    openModal() {
+        this.showModal = true;
+    }
+
+    closeModal() {
+        this.showModal = false;
+    }
+
+    handleSuccess() {
+        this.closeModal();
+        // Perform any necessary actions after successful account creation
+        // const accountId = event.detail.id;
+        // this.refreshTable(accountId); // Call the parent component's method to refresh the datatable
+        // this.showToast('Success', 'Account Created', 'success');
+    }
+    
+    // //handle error
+    // handleError(error) {
+    //     this.closeModal();
+
+    //     let errorMessage = 'Unknown error';
+    //     if (error && error.body && error.body.message) {
+    //         errorMessage = error.body.message;
+    //     }
+
+    //     this.showToast('Error', errorMessage, 'error');
+    // }
+
+    // showToast(title, message, variant) {
+    //     const event = new ShowToastEvent({
+    //         title: title,
+    //         message: message,
+    //         variant: variant
+    //     });
+    //     this.dispatchEvent(event);
+    // }
+
+    // createAccount(recordInput) {
+    //     return createAccount({ account: recordInput })
+    //         .then(result => {
+    //             this.handleSuccess(result);
+    //         })
+    //         .catch(error => {
+    //             this.handleError(error);
+    //         });
+    // }
+   
 }
+
 
 

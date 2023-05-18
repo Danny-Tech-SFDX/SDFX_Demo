@@ -1,5 +1,7 @@
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, api, wire, track } from 'lwc';
 import getAccounts from '@salesforce/apex/ListControllerLwc.getAccounts';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
 // import ACCOUNT_NAME_FIELD from '@salesforce/schema/Account.Name';
 // //import ACCOUNT_TYPE_FIELD from '@salesforce/schema/Account.Type';
 // import ACCOUNT_PHONE_FIELD from '@salesforce/schema/Account.Phone';
@@ -15,40 +17,7 @@ const COLUMNS = [
     { label: 'Website', fieldName: 'Website', type: 'url' , editable: true, sortable: 'true' }
 ];
 
-// const COLUMNS = [
-//     {
-//         label: 'Account Name',
-//         fieldName: ACCOUNT_NAME_FIELD.fieldApiName,
-//         type: 'text',
-//         sortable: 'true'
-//     },
-//     { 
-//         label: 'Industry', 
-//         fieldName: ACCOUNT_INDUSTRY, 
-//         type: 'text' , 
-//         sortable: 'true'  
-//     },
-//     {
-//         label: 'Phone',
-//         fieldName: ACCOUNT_PHONE_FIELD.fieldApiName,
-//         type: 'phone',
-//         sortable: 'true'
-//     },    
-//     { 
-//         label: 'Website', 
-//         fieldName: ACCOUNT_WEBSITE.fieldApiName,
-//         type: 'url' , 
-//         sortable: 'true' 
-//     },
-//     { 
-//         label: 'Annual Revenue', 
-//         fieldName: ACCOUNT_REVENUE.fieldApiName,
-//          type: 'currency' ,
-//         sortable: 'true' 
-//     },
-  
 
-// ];
 
 export default class CustomSearch extends LightningElement {
    
@@ -128,5 +97,55 @@ export default class CustomSearch extends LightningElement {
         this.data = parseData;
     }
 
+    ///modal to create account
+    @track showModal = false;
+    @api refreshTable;
+
+    openModal() {
+        this.showModal = true;
+    }
+
+    closeModal() {
+        this.showModal = false;
+    }
+
+    handleSuccess() {
+        this.closeModal();
+        // Perform any necessary actions after successful account creation
+        // const accountId = event.detail.id;
+        // this.refreshTable(accountId); // Call the parent component's method to refresh the datatable
+        // this.showToast('Success', 'Account Created', 'success');
+    }
+    
+    // //handle error
+    // handleError(error) {
+    //     this.closeModal();
+
+    //     let errorMessage = 'Unknown error';
+    //     if (error && error.body && error.body.message) {
+    //         errorMessage = error.body.message;
+    //     }
+
+    //     this.showToast('Error', errorMessage, 'error');
+    // }
+
+    // showToast(title, message, variant) {
+    //     const event = new ShowToastEvent({
+    //         title: title,
+    //         message: message,
+    //         variant: variant
+    //     });
+    //     this.dispatchEvent(event);
+    // }
+
+    // createAccount(recordInput) {
+    //     return createAccount({ account: recordInput })
+    //         .then(result => {
+    //             this.handleSuccess(result);
+    //         })
+    //         .catch(error => {
+    //             this.handleError(error);
+    //         });
+    // }
    
 }
