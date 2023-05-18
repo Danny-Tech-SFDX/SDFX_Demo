@@ -25,8 +25,9 @@ public with sharing class AccountController {
     //final account list
     @AuraEnabled(cacheable=true)
     public static List<Account> getAccounts(String searchkey) {
-        String searchString = '%'+ searchkey +'%';
-        return [SELECT id, Name, Industry, AnnualRevenue, Phone, Website FROM Account WHERE Name like:searchString];
+        // String searchString = '%'+ searchkey +'%';
+        // return [SELECT id, Name, Industry, AnnualRevenue, Phone, Website FROM Account WHERE Name like:searchString];
+        return [SELECT id, Name, Industry, AnnualRevenue, Phone, Website FROM Account WHERE Name like: '%'+ searchkey +'%'];
     }
 
     @AuraEnabled(cacheable=true)

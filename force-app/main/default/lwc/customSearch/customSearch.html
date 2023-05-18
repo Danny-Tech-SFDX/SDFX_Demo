@@ -7,18 +7,22 @@
     <lightning-layout-item size="2" padding="arounf-small">
     <lightning-button label="Search Account" onclick={handleSearch} variant="brand"></lightning-button>
     </lightning-layout-item>
-    
-    <template if:true={accounts.data}>
+
+    <template if:true={data}>
         <div class="table-container">
             <lightning-datatable
                 key-field="id"
-                data={accounts.data}
+                data={data}
                 columns={columns}
+                sorted-by={sortBy}
+                sorted-direction={sortDirection}
+                onsort={doSorting}
+                hide-checkbox-column="true"
             >
             </lightning-datatable>
         </div>
     </template>
-    <template if:true={accounts.error}>
+    <template if:true={data.error}>
         <!-- <c-error-panel errors={accounts.error}></c-error-panel> -->
     </template>
 </template>
