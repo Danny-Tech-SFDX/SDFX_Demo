@@ -1,0 +1,24 @@
+
+<template>
+    <lightning-layout-item size="4" padding="around-small">
+        <lightning-input type="text" label="Enter Account Name Here" value={key} onchange={updateKey}></lightning-input>
+    </lightning-layout-item>
+
+    <lightning-layout-item size="2" padding="arounf-small">
+    <lightning-button label="Search Account" onclick={handleSearch} variant="brand"></lightning-button>
+    </lightning-layout-item>
+    
+    <template if:true={accounts.data}>
+        <div class="table-container">
+            <lightning-datatable
+                key-field="id"
+                data={accounts.data}
+                columns={columns}
+            >
+            </lightning-datatable>
+        </div>
+    </template>
+    <template if:true={accounts.error}>
+        <!-- <c-error-panel errors={accounts.error}></c-error-panel> -->
+    </template>
+</template>

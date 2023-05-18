@@ -1,0 +1,24 @@
+.THIS {
+    position: relative;
+    z-index: 1;
+}
+
+.THIS .mainSection {
+    height:100%;
+    width:70%; 
+    float: left;
+    padding-right: 10px;
+    padding-bottom: 50px;
+}
+
+.THIS .sideSection {
+    height:100%;
+    width:30%; 
+    float: left;
+    padding-left: 10px;
+}
+
+.THIS .titles {
+    font-weight: bold;
+	font-size:18px;
+}

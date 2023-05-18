@@ -1,0 +1,130 @@
+<!-- <template>
+    <lightning-card title="Account List" variant="outlined">
+      <div class="slds-p-horizontal_medium">
+        <lightning-input type="text" label="Search" onchange={handleSearch}></lightning-input>
+      </div>
+      <div class="slds-p-horizontal_medium slds-p-top_medium">
+        <lightning-datatable
+          key-field="Id"
+          data={accounts}
+          columns={columns}
+          onrowaction={handleRowAction}
+          sorted-by={sortBy}
+          sorted-direction={sortDirection}
+          onsort={handleSort}
+          hide-checkbox-column="true"
+          default-sort-direction="asc"
+          onrowselection={handleRowSelection}
+          selected-rows={selectedRows}
+          
+          enable-infinite-loading="\{loadMoreStatus !== 'done'}"
+
+          onloadmore={handleLoadMore}
+        ></lightning-datatable>
+      </div>
+      <template if:true={showModal}>
+        <c:createAccountModal onmodalclose={handleModalClose}></c:createAccountModal>
+      </template>
+    </lightning-card>
+  </template>
+   -->
+
+
+  
+  
+  <template>
+    <!-- <lightning-input type="Search" onchange={handleKeyChange} class="slds-m-bottom-small" label="Search" value={accountName}>
+
+    </lightning-input>
+
+  <template for:each={accountList} for:item="accountObj" for:index="index">
+     <option key={accountObj.Id}>{accountObj.Name}</option>
+
+  </template> -->
+
+  <!-- <lightning-card title="Account List">
+    <lightning-datatable
+        key-field="Id"
+        data={accounts}
+        columns={columns}
+        hide-checkbox-column="true">
+    </lightning-datatable>
+</lightning-card> -->
+
+
+
+<lightning-card title="New Final Account List">
+    <lightning-layout multiple-rows="true" vertical-align="end">
+        <lightning-layout-item size="4" padding="around-small">
+            <lightning-input type="text" label="Enter Account Name Here" value={key} onchange={updateKey}></lightning-input>
+        </lightning-layout-item>
+
+        <lightning-layout-item size="2" padding="arounf-small">
+        <lightning-button label="Search Account" onclick={handleSearch} variant="brand"></lightning-button>
+        </lightning-layout-item>
+    
+        
+           
+                <lightning-layout-item   if:true={accounts} size="12" padding="around-small"></lightning-layout-item>
+                <lightning-datatable key-field="id" data={accounts.data} columns={cols} sorted-by={sortedBy} sorted-direction={sortedDirection} onsort={onSort}></lightning-datatable>
+            </lightning-layout-item>
+
+            <lightning-layout-item   if:true={error}>
+
+            </lightning-layout-item>
+            
+        
+        <!-- <lightning-datatable key-field="id" data={accounts.data} columns={cols} onheaderaction={handleColumnSorting}></lightning-datatable> -->
+        
+
+    </lightning-layout>
+
+</lightning-card>
+
+  </template>
+
+ 
+
+
+<!-- 
+
+<template> 
+    <lightning-input type="Search" onchange={handleKeyChange} class="slds-m-bottom-small" label="Search" value={accountName}>
+
+    </lightning-input> 
+  <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-m-top_small">
+    <thead>
+       <tr class="slds-line-height_reset">
+          <th class="" scope="col">
+             <div class="slds-truncate" title="Account Name">Account Name</div>
+          </th>
+          <th class="" scope="col">
+             <div class="slds-truncate" title="Industry Name">Industry Name</div>
+          </th>
+          <th class="" scope="col">
+             <div class="slds-truncate" title="Annual Revenue">Annual Revenue</div>
+          </th>
+          <th class="" scope="col">
+             <div class="slds-truncate" title="Phone">Phone</div>
+          </th>
+          <th class="" scope="col">
+            <div class="slds-truncate" title="Website">Website</div>
+         </th>
+       </tr>
+    </thead>
+    
+    <tbody>   
+       <template for:each={accountList} for:item="acc">
+          <tr class="slds-hint-parent" key={contact.Id}>
+             <td>
+                <div class="slds-truncate">{acc.Name}</div>
+             </td>
+             <td>
+                <div class="slds-truncate">{acc.Industry}</div>
+             </td>
+        
+          </tr>
+       </template>
+    </tbody>
+ </table>
+</template> -->

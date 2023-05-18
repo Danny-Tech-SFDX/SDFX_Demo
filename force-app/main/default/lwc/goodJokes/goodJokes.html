@@ -1,0 +1,14 @@
+<template>
+    <lightning-card title="Random Joke">
+      <template if:true={joke}>
+        <div class="slds-m-left_x-small">
+          <h1><strong>Question:</strong> {joke.setup}</h1>
+        <h1><strong>Answer:</strong>{joke.punchline}</h1>
+        </div>
+      </template>
+      <br/>
+      <div class="slds-m-left_large">
+        <lightning-button label="Jokes" onclick={getJoke}></lightning-button>
+      </div>
+  </lightning-card>
+  </template>
