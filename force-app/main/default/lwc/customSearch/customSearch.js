@@ -51,13 +51,37 @@ const COLUMNS = [
 // ];
 
 export default class CustomSearch extends LightningElement {
-    key;
-    @track accounts = [];
+   
 
     @track data;
     @track columns = COLUMNS;
     // @wire(getAccounts)
     // accounts;
+
+    key;
+   // @track accounts;
+      //function that handle the search keywords
+      updateKey(event){
+       this.key = event.target.value;
+    }
+
+     //Function to handle search button click
+   handleSearch() {
+       getAccounts({searchkey: this.key})
+       .then(result =>{
+           this.data = result;
+       })
+       .catch(error=>{
+           this.data = null;
+       });
+   }
+
+
+
+
+
+
+
 
     @wire(getAccounts)
     accouns(result) {
