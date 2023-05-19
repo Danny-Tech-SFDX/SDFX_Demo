@@ -52,11 +52,11 @@ export default class AccountList extends LightningElement {
      connectedCallback() {
         // set datatable columns info
         this.columns = [
-            { label: 'Account Name', fieldName: 'Name', type: 'text', editable: true, sortable: 'true' },
-            { label: 'Industry', fieldName: 'Industry', type: 'text' , editable: true, sortable: 'true'  },
-            { label: 'Annual Revenue', fieldName: 'AnnualRevenue', type: 'currency' , editable: true, sortable: 'true' },
-            { label: 'Phone', fieldName: 'Phone', type: 'phone' , editable: true, sortable: 'true' },
-            { label: 'Website', fieldName: 'Website', type: 'url' , editable: true, sortable: 'true' }
+            { label: 'Account Name', fieldName: 'Name', type: 'text', sortable: 'true' },
+            { label: 'Industry', fieldName: 'Industry', type: 'text' , sortable: 'true'  },
+            { label: 'Annual Revenue', fieldName: 'AnnualRevenue', type: 'currency' ,  sortable: 'true' },
+            { label: 'Phone', fieldName: 'Phone', type: 'phone' , sortable: 'true' },
+            { label: 'Website', fieldName: 'Website', type: 'url' , sortable: 'true' }
         ];
     }
 
